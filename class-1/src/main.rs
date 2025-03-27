@@ -58,7 +58,8 @@ fn loops() {
 
 fn changable_var() {
     let mut x = 3;
+    println!("Initial value of x: {}", x);
     x = 34;
 
-    print!("{}", x);
+    print!("Final value of x: {}", x);
 }
