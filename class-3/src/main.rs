@@ -29,7 +29,7 @@ fn main() {
 
     println!("{}", r.area());
 
-    extra();
+    // extra();
 
 }
 
