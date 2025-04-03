@@ -1,0 +1,14 @@
+-> In solana, everything is stored in different addresses,
+-> not like Ethereum that stores a complete contract with it's functionality in a single address
+-> in solana, even a function of same token is stored in different address
+-> so, when an user calls a function, he/she should specify the address of the function what they want to call
+-> they need to specify 3 things
+   1. public address of the token
+   2. all the addresses of all the functions they want to interact with
+   3. all the instructions
+
+-> the user can only send the data in bits, so we have to serialize it and do the operation and then deserialize it to store it back to the solana blockchain
+
+
+-> Remember solana is faster than Ethereum, as solana can perform tasks parallely while Ethereum can't
+-> but if many user are interacting with the same address then it becomes sequentially for that address
