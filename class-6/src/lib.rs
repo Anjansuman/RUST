@@ -10,15 +10,19 @@ use solana_program::{
 // this is to store the whether the user has chosen to increment or decrement
 #[derive(BorshSerialize, BorshDeserialize)]
 enum InstructionType {
-    increment(u32),
-    decrement(u32)
+    increment(u32), // if instruction_data's first element = 1, this will run
+    decrement(u32) // if instruction_data's first element = 0, this will run
+    // the next four byts will define the arguments
 }
 
+// this is the data that will get stored in the Solana Blockchain
 #[derive(BorshSerialize, BorshDeserialize)]
 struct Counter {
     count: u32
 }
 
+// this entrypoint makes the function written inside it as main function just like normal main() in main.rs file
+// cause we might have more functions for calculation and stuff
 entrypoint!(counter_contract);
 
 pub fn counter_contract(

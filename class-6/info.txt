@@ -12,3 +12,13 @@
 
 -> Remember solana is faster than Ethereum, as solana can perform tasks parallely while Ethereum can't
 -> but if many user are interacting with the same address then it becomes sequentially for that address
+
+
+///////////////////////////////// DEPLOYMENT /////////////////////////////////
+
+-> After writing the program, for testing it we have to deploy it somewhere, either of mainnet, or devnet, or testnet or localhost
+-> RUN solana config get => change the JSON RPC url to whatever you want
+-> RUN solana-test-validator, to connect to the blockchain
+-> RUN cargo build-sbf, and this doesn't work try using only builder (Solana playground), and download the build file
+-> build file will the format of .so
+-> solana program deploy ./path/to/build_file_name.so
