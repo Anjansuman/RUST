@@ -53,14 +53,16 @@ export const MainBlock = () => {
 
             const message = await response.data.message;
 
+            // respond accordingly
             if(message === "You won") {
                 // logic to show user won
                 toast.success("You won");
-            } else {
+            } else if(message === "You lost") {
                 toast.error("You lost");
+            } else {
+                toast.error(message);
             }
 
-            // respond accordingly
         } catch (error) {
             toast.error("Transaction failed!");
         }
