@@ -1,15 +1,16 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "./Button";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import axios from "axios";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import toast, { Toaster } from "react-hot-toast";
 
 
 type amountType = 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6;
 const BACKEND_URL = "http://localhost:3004";
-const Platform_Fee = 0.03; // 3% of the total amount
+// const Platform_Fee = 0.03; // 3% of the total amount
 const Platform_PublicKey = new PublicKey("4kqKHFe3abVs8LymTTdzuSxCn5RFd3FRHoJ4Ttow3GR2");
 
 export const MainBlock = () => {
@@ -28,7 +29,7 @@ export const MainBlock = () => {
         try {
 
             const betAmount = amount * LAMPORTS_PER_SOL; // IG something sus in this it seems it will send in multiple of lamports not in multiple of sol
-            const feeAmount = amount * Platform_Fee;
+            // const feeAmount = amount * Platform_Fee;
 
             const transaction = new Transaction().add(
                 SystemProgram.transfer({
@@ -43,6 +44,8 @@ export const MainBlock = () => {
 
             await connection.confirmTransaction(signature);
 
+            toast.success("Transaction succeeded!")
+
 
             const response = await axios.post(`${BACKEND_URL}/bet`, {
                 signature
@@ -52,18 +55,26 @@ export const MainBlock = () => {
 
             if(message === "You won") {
                 // logic to show user won
-                alert("You won");
+                toast.success("You won");
             } else {
-                alert("You lost");
+                toast.error("You lost");
             }
 
             // respond accordingly
         } catch (error) {
-            alert("Error occured!");
+            toast.error("Transaction failed!");
         }
     }
 
     return <div className="h-auto max-w-[385px] py-4 px-10 bg-gray-800 rounded-lg flex flex-col gap-y-4 shadow-md">
+        <Toaster position="top-center" reverseOrder={false} 
+            toastOptions={{
+                style: {
+                    backgroundColor: "#1e2939",
+                    color: "white"
+                }
+            }}
+        />
         <div className="flex justify-center items-center text-2xl font-semibold ">
             Choose Your Side
         </div>

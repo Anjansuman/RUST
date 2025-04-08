@@ -1,13 +1,14 @@
 import { Coins } from "lucide-react"
 import { MainBlock } from "./Components/MainBlock"
-import { ConnectionProvider, useConnection, useWallet, WalletProvider } from "@solana/wallet-adapter-react";
+import { ConnectionProvider, useConnection, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { clusterApiUrl } from "@solana/web3.js";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
+// import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
-// import "@solana/wallet-adapter-react-ui/styles.css";
+import "@solana/wallet-adapter-react-ui/styles.css";
+
 
 
 function App() {
@@ -17,21 +18,27 @@ function App() {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
   const wallets = useMemo(() => [
-    new PhantomWalletAdapter(),
+    // new PhantomWalletAdapter(),
   ], [network]);
+
 
 
   return <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect >
         <WalletModalProvider>
           <div className='h-screen w-screen bg-gray-900 text-white p-4'>
-            <header className="text-3xl font-semibold flex items-center gap-3 fixed ">
-              <div>
-                <Coins />
+            <header className="w-full pr-8 text-3xl font-semibold flex justify-between items-center gap-3 fixed ">
+              <div className="flex items-center gap-3">
+                <div>
+                  <Coins />
+                </div>
+                <div>
+                  Coin Flip
+                </div>
               </div>
-              <div>
-                Coin Flip
-              </div>
+                <div>
+                  <WalletMultiButton />
+                </div>
             </header>
 
             {!connected() ?
@@ -50,6 +57,7 @@ function App() {
   </ConnectionProvider>
 }
 
+// useConnection is separated due to slow rendering of connection of wallet
 function connected() {
   const connected = useConnection();
 
