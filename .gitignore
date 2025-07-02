@@ -1,2 +1,7 @@
 target
 .env
+node_modules
+# Added by cargo
+
+/node_modules
+/target
