@@ -9,11 +9,11 @@ import {
     TransactionInstruction
 } from "@solana/web3.js";
 
-test("one transfer", () => {
+test("double contract", () => {
     const svm = new LiteSVM();
 
     const contractKey = Keypair.generate();
-    svm.addProgramFromFile(contractKey.publicKey, "./cpi.so");
+    svm.addProgramFromFile(contractKey.publicKey, "./double.so");
 
     const payer = new Keypair();
     svm.airdrop(payer.publicKey, BigInt(LAMPORTS_PER_SOL));
@@ -70,7 +70,6 @@ test("one transfer", () => {
     doubleIt();
 
     const newDataAcc = svm.getAccount(dataAccount.publicKey);
-    console.log(newDataAcc)
 
     expect(newDataAcc?.data[0]).toBe(8);
     expect(newDataAcc?.data[1]).toBe(0);

@@ -11,9 +11,9 @@ struct on_chain_data {
     count: u32
 }
 
-entrypoint!(program_double);
+entrypoint!(process_instruction);
 
-pub fn program_double(
+pub fn process_instruction(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
     instruction_data: &[u8]

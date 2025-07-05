@@ -5,7 +5,7 @@ import { LiteSVM } from "litesvm";
 
 test("cpi test", () => {
 
-    const svm = new LiteSVM();
+    let svm = new LiteSVM();
 
     const doubleContract = PublicKey.unique();
     svm.addProgramFromFile(doubleContract, "./double.so");
@@ -13,12 +13,16 @@ test("cpi test", () => {
     const cpiContract = PublicKey.unique();
     svm.addProgramFromFile(cpiContract, "./cpi.so");
 
-    const payer = Keypair.generate();
+    const payer = new Keypair();
     svm.airdrop(payer.publicKey, BigInt(LAMPORTS_PER_SOL));
 
-    const dataAccount = Keypair.generate();
+    const dataAccount = new Keypair();
 
     createDataAccount(svm, payer, doubleContract, dataAccount);
+
+    const balanceAfter = svm.getBalance(dataAccount.publicKey);
+
+    expect(balanceAfter).toBe(svm.minimumBalanceForRentExemption(BigInt(4)));
 
     cpiCall(svm, dataAccount, doubleContract, cpiContract, payer);
 
@@ -51,7 +55,8 @@ function createDataAccount(svm: LiteSVM, payer: Keypair, doubleContract: PublicK
 }
 
 function cpiCall(svm: LiteSVM, dataAccount: Keypair, doubleContract: PublicKey, cpiContract: PublicKey, payer: Keypair) {
-    const blockhash = svm.latestBlockhash();
+
+
     const ix = new TransactionInstruction({
         keys: [
             { pubkey: dataAccount.publicKey, isSigner: true, isWritable: true },
@@ -60,11 +65,14 @@ function cpiCall(svm: LiteSVM, dataAccount: Keypair, doubleContract: PublicKey, 
         programId: cpiContract,
         data: Buffer.from(""),
     });
+    const blockhash = svm.latestBlockhash();
 
-    const tx = new Transaction();
+    let tx = new Transaction();
     tx.recentBlockhash = blockhash;
+    tx.feePayer = payer.publicKey;
     tx.add(ix);
     tx.sign(payer, dataAccount);
 
-    svm.sendTransaction(tx);
+    const res = svm.sendTransaction(tx);
+    svm.expireBlockhash();
 }
